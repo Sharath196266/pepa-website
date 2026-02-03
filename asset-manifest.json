@@ -1,14 +1,14 @@
 {
   "files": {
-    "main.css": "/Sharath196266/pepa-website/static/css/main.b9c4df6f.css",
-    "main.js": "/Sharath196266/pepa-website/static/js/main.50c00de7.js",
-    "static/media/pepa_logo_1.png": "/Sharath196266/pepa-website/static/media/pepa_logo_1.0d3bc32dfa9df863cd50.png",
-    "index.html": "/Sharath196266/pepa-website/index.html",
-    "main.b9c4df6f.css.map": "/Sharath196266/pepa-website/static/css/main.b9c4df6f.css.map",
-    "main.50c00de7.js.map": "/Sharath196266/pepa-website/static/js/main.50c00de7.js.map"
+    "main.css": "/pepa-website/static/css/main.b9c4df6f.css",
+    "main.js": "/pepa-website/static/js/main.5cf221a6.js",
+    "static/media/pepa_logo_1.png": "/pepa-website/static/media/pepa_logo_1.0d3bc32dfa9df863cd50.png",
+    "index.html": "/pepa-website/index.html",
+    "main.b9c4df6f.css.map": "/pepa-website/static/css/main.b9c4df6f.css.map",
+    "main.5cf221a6.js.map": "/pepa-website/static/js/main.5cf221a6.js.map"
   },
   "entrypoints": [
     "static/css/main.b9c4df6f.css",
-    "static/js/main.50c00de7.js"
+    "static/js/main.5cf221a6.js"
   ]
 }
