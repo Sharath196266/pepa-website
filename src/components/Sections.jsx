@@ -2,9 +2,10 @@ import React from "react";
 import "../styles/Global.css";
 import Pricing from "../components/Pricing";
 import "../styles/FaqSection.css";
-import { useState } from "react";
+import { useState, useEffect} from "react";
 import "../styles/Services.css";
-
+import "../styles/About.css";
+import "../styles/Work.css";
 
 /* ================= HERO ================= */
 export const Hero = () => (
@@ -79,120 +80,238 @@ export const Services = () => {
   ];
 
   return (
-    <section id="services" className="section services-section reveal">
+    <>
+    <section className="services-page" id="services">
 
-      <div className="section-inner">
+  <div className="services-container">
 
-        <span className="section-badge">Our Services</span>
+    {/* LEFT */}
+    <div>
+      <span className="services-badge">Our Services</span>
 
-        <h2 className="section-title">
-          Result-Driven <span>Digital Solutions</span>
-        </h2>
+      <h2 className="services-heading">
+        Result-Driven <span>Digital Solutions</span>
+      </h2>
 
-        <p className="section-subtitle">
-          From branding to performance marketing, we help businesses grow faster
-          with proven strategies.
+      <p className="services-description">
+        From branding to performance marketing, we help businesses grow faster
+        with proven strategies.
+      </p>
+    </div>
+
+    {/* RIGHT */}
+    <div className="services-right">
+
+      <div className="service-item">
+        <div className="service-header">
+          <div className="service-icon">📱</div>
+          <h3 className="service-title">Social Media Marketing</h3>
+        </div>
+        <p className="service-text">
+          Platform-specific content, posters, reels, and campaigns.
         </p>
+        <ul className="service-points">
+          <li>Instagram, Facebook, LinkedIn</li>
+          <li>Posters & Reels</li>
+          <li>Content Calendar</li>
+        </ul>
+      </div>
 
-        <div className="services-grid">
+      <div className="service-item featured">
+        <div className="service-header">
+          <div className="service-icon">🌐</div>
+          <h3 className="service-title">SEO & Website Management</h3>
+        </div>
+        <p className="service-text">
+          Search-optimized websites designed to rank higher.
+        </p>
+        <ul className="service-points">
+          <li>On-Page SEO</li>
+          <li>Technical SEO</li>
+          <li>Maintenance</li>
+        </ul>
+      </div>
 
-          {services.map((service, index) => (
-            <div
-              key={index}
-              className={`service-card ${service.highlight ? "highlight" : ""}`}
-            >
+      <div className="service-item">
+        <div className="service-header">
+          <div className="service-icon">🚀</div>
+          <h3 className="service-title">Premium Branding</h3>
+        </div>
+        <p className="service-text">
+          Influencer marketing, video ads, and branding.
+        </p>
+        <ul className="service-points">
+          <li>Brand Identity</li>
+          <li>Influencer Campaigns</li>
+          <li>Paid Ads</li>
+        </ul>
+      </div>
 
-              <div className="service-icon">{service.icon}</div>
+    </div>
 
-              <h3>{service.title}</h3>
+  </div>
+  
+</section>
+<Pricing/>
+</>
+  );
+};
 
-              <p>{service.desc}</p>
 
-              <ul>
-                {service.points.map((point, i) => (
-                  <li key={i}>✔ {point}</li>
-                ))}
-              </ul>
 
-            </div>
-          ))}
+/* ================= ABOUT ================= */
 
+export const About = () => {
+  return (
+    <section className="about-section" id="about">
+
+      <div className="about-container">
+
+        {/* LEFT */}
+        <div className="about-left">
+          <span className="about-badge">About Us</span>
+
+          <h2 className="about-title">
+            Branding Solutions <span>Experts</span>
+          </h2>
+
+          <p className="about-text">
+            At <strong>PEPA Branding Solutions</strong>, we help businesses
+            transform ideas into powerful digital brands. We combine strategy,
+            creativity, and performance marketing to deliver measurable growth.
+          </p>
+
+          <p className="about-text">
+            From SEO and social media to branding and paid advertising, our team
+            focuses on building strong online presence, high engagement, and
+            consistent lead generation.
+          </p>
+
+          <ul className="about-points">
+            <li>✔ Result-driven digital marketing</li>
+            <li>✔ Custom strategies for every business</li>
+            <li>✔ Transparent reporting</li>
+            <li>✔ Dedicated growth experts</li>
+          </ul>
+        </div>
+
+        {/* RIGHT */}
+        <div className="about-right">
+          <div className="about-card">
+            <h3>Our Mission</h3>
+            <p>
+              Empower businesses with digital strategies that generate
+              sustainable growth.
+            </p>
+          </div>
+
+          <div className="about-card">
+            <h3>Our Vision</h3>
+            <p>
+              Become a trusted digital growth partner for brands worldwide.
+            </p>
+          </div>
         </div>
 
       </div>
-
-      <Pricing />
 
     </section>
   );
 };
 
 
-/* ================= ABOUT ================= */
-export const About = () => (
-  <section id="about" className="section alt reveal">
-    <div className="section-inner narrow">
-      <span className="section-badge">About Us</span>
-      <h2 className="section-title">Branding Solutions Experts</h2>
+/* ================= WORK ================= */
 
-      <p className="section-subtitle">
-        At <strong>PEPA Branding Solutions</strong>, we believe the right
-        strategy can unlock tremendous growth for your business. Based in
-        Bangalore, we are a team of passionate marketers and creatives.
-      </p>
+export const Work = () => {
 
-      <p className="section-subtitle">
-        From SEO and content marketing to social media, PPC, and branding — we
-        deliver measurable results that matter.
-      </p>
-    </div>
-  </section>
-);
+  const works = [
+    "Brand Campaigns",
+    "Corporate Websites",
+    "Social Media Growth",
+    "E-commerce Marketing",
+    "Lead Generation Funnels",
+    "Video Marketing"
+  ];
 
-/* ================= OUR WORK ================= */
-export const Work = () => (
-  <section id="work" className="section alt reveal">
-    <div className="section-inner">
-      <span className="section-badge">Our Work</span>
-      <h2 className="section-title">Selected Projects</h2>
-      <p className="section-subtitle">
+  return (
+    <section className="work-section" id="work">
+
+      <span className="work-badge">Our Work</span>
+
+      <h2 className="work-title">
+        Selected <span>Projects</span>
+      </h2>
+
+      <p className="work-subtitle">
         Campaigns and digital experiences crafted for real-world impact.
       </p>
 
-      <div className="cards-grid">
-        <div className="card">Brand Campaigns</div>
-        <div className="card">Corporate Websites</div>
-        <div className="card">Social Media Growth</div>
+      <div className="work-grid">
+        {works.map((item, i) => (
+          <div key={i} className="work-card">
+            <h3>{item}</h3>
+            <p>
+              High-quality solutions designed to drive engagement and results.
+            </p>
+          </div>
+        ))}
       </div>
-    </div>
-  </section>
-);
 
-/* ================= ACHIEVEMENTS ================= */
-export const Achievements = () => (
-  <section id="achievements" className="section reveal">
-    <div className="section-inner">
-      <span className="section-badge">Achievements</span>
-      <h2 className="section-title">Proven Results</h2>
+    </section>
+  );
+};
 
-      <div className="stats-grid">
-        <div className="stat">
-          <h3>150+</h3>
-          <p>Brands Served</p>
-        </div>
-        <div className="stat">
-          <h3>10×</h3>
-          <p>Average Growth</p>
-        </div>
-        <div className="stat">
-          <h3>5+</h3>
-          <p>Years Experience</p>
-        </div>
+
+export const Achievements = () => {
+
+  const stats = [
+    { label: "Projects in Pipeline", value: 5 },
+    { label: "Marketing Strategies Designed", value: 12 },
+    { label: "Industries Targeted", value: 8 },
+    { label: "Launched In", value: 2026, noAnim: true }
+  ];
+
+  const [counts, setCounts] = useState(stats.map(() => 0));
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCounts(prev =>
+        prev.map((c, i) => {
+          if (stats[i].noAnim) return stats[i].value;
+          return c < stats[i].value ? c + 1 : c;
+        })
+      );
+    }, 40);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <section className="achievements-section">
+
+      <span className="achievements-badge">Milestones</span>
+
+      <h2 className="achievements-title">
+        Building Momentum <span>From Day One</span>
+      </h2>
+
+      <p className="achievements-subtitle">
+        We may be new, but our foundation is strong. PEPA Branding Solutions is
+        built on strategy, creativity, and execution excellence.
+      </p>
+
+      <div className="achievements-grid">
+        {stats.map((s, i) => (
+          <div key={i} className="achievement-card">
+            <h3>{counts[i]}</h3>
+            <p>{s.label}</p>
+          </div>
+        ))}
       </div>
-    </div>
-  </section>
-);
 
+    </section>
+  );
+};
 /* ================= FAQ ================= */
 export const FAQ = () => {
 

@@ -282,3 +282,143 @@ body {
     max-width: 280px;
   }
 }
+/* ================= HERO ================= */
+
+.hero {
+  min-height: 100vh;
+  padding: 120px 0 100px;
+  background: radial-gradient(
+    circle at top,
+    rgba(254, 224, 100, 0.30),
+    #ffffff 65%
+  );
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.hero-inner {
+  max-width: 900px;
+  padding-inline: min(120px, 6vw);
+}
+
+/* BADGE */
+
+.hero-badge {
+  background: var(--pepa-yellow);
+  padding: 8px 22px;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 1.4px;
+  display: inline-block;
+  margin-bottom: 26px;
+}
+
+/* TITLE */
+
+.hero-title {
+  font-size: clamp(2.6rem, 5vw, 4rem);
+  font-weight: 900;
+  line-height: 1.05;
+  margin-bottom: 22px;
+  color: var(--dark);
+}
+
+.hero-title span {
+  color: var(--pepa-yellow);
+}
+
+/* SUBTITLE */
+
+.hero-subtitle {
+  font-size: 1.05rem;
+  color: #374151;
+  line-height: 1.7;
+  max-width: 650px;
+  margin: 0 auto 38px;
+}
+
+/* ACTIONS */
+
+.hero-actions {
+  display: flex;
+  justify-content: center;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+
+/* BUTTONS */
+
+.hero-btn {
+  padding: 15px 34px;
+  border-radius: 999px;
+  font-size: 0.9rem;
+  font-weight: 800;
+  text-decoration: none;
+  transition: all 0.35s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* PRIMARY */
+
+.hero-btn.primary {
+  background: var(--dark);
+  color: var(--white);
+}
+
+.hero-btn.primary:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 18px 40px rgba(0,0,0,0.25);
+}
+
+/* SECONDARY */
+
+.hero-btn.secondary {
+  background: transparent;
+  border: 2px solid var(--dark);
+  color: var(--dark);
+}
+
+.hero-btn.secondary:hover {
+  background: var(--dark);
+  color: var(--white);
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media (max-width: 768px) {
+
+  .hero {
+    padding: 110px 0 80px;
+  }
+
+  .hero-title {
+    font-size: 2.2rem;
+  }
+
+  .hero-subtitle {
+    font-size: 0.95rem;
+  }
+
+}
+
+@media (max-width: 480px) {
+
+  .hero-title {
+    font-size: 2rem;
+  }
+
+  .hero-actions {
+    gap: 14px;
+  }
+
+  .hero-btn {
+    width: 100%;
+    max-width: 260px;
+  }
+
+}
