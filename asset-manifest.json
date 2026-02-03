@@ -1,14 +1,14 @@
 {
   "files": {
     "main.css": "./static/css/main.620d5d7c.css",
-    "main.js": "./static/js/main.031d2f63.js",
+    "main.js": "./static/js/main.7ab1f1b2.js",
     "static/media/pepa_logo_1.png": "./static/media/pepa_logo_1.0d3bc32dfa9df863cd50.png",
     "index.html": "./index.html",
     "main.620d5d7c.css.map": "./static/css/main.620d5d7c.css.map",
-    "main.031d2f63.js.map": "./static/js/main.031d2f63.js.map"
+    "main.7ab1f1b2.js.map": "./static/js/main.7ab1f1b2.js.map"
   },
   "entrypoints": [
     "static/css/main.620d5d7c.css",
-    "static/js/main.031d2f63.js"
+    "static/js/main.7ab1f1b2.js"
   ]
 }
