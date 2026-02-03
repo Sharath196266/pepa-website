@@ -43,7 +43,7 @@ const Navbar = () => {
           <a href="#services">Services</a>
           <a href="#work">Our Work</a>
           <a href="#pricing">Plans</a>
-          <a href="#faq">FAQs</a>
+          <a href="#faqs">FAQs</a>
           <a href="#contact">Contact</a>
         </div>
 
@@ -73,7 +73,7 @@ const Navbar = () => {
           <a href="#services" onClick={() => setIsOpen(false)}>Services</a>
           <a href="#work" onClick={() => setIsOpen(false)}>Our Work</a>
           <a href="#pricing" onClick={() => setIsOpen(false)}>Plans</a>
-          <a href="#faq" onClick={() => setIsOpen(false)}>FAQs</a>
+          <a href="#faqs" onClick={() => setIsOpen(false)}>FAQs</a>
           <a href="#contact" onClick={() => setIsOpen(false)}>Contact</a>
 
           <a
