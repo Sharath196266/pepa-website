@@ -77,7 +77,7 @@ const Navbar = () => {
           <a href="#contact" onClick={() => setIsOpen(false)}>Contact</a>
 
           <a
-            href="#call"
+            href="#contact"
             className="mobile-call-btn"
             onClick={() => setIsOpen(false)}
           >
