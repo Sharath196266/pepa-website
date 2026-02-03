@@ -1,0 +1,137 @@
+/* ================= SERVICES ================= */
+
+.services-section {
+  padding: 100px 0;
+  background: radial-gradient(
+    circle at top,
+    rgba(254, 224, 100, 0.28),
+    #ffffff 65%
+  );
+}
+
+/* GRID */
+
+.services-grid {
+  margin-top: 60px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+}
+
+/* CARD */
+
+.service-card {
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(18px);
+  padding: 42px 34px;
+  border-radius: 26px;
+  box-shadow: 0 40px 90px rgba(0, 0, 0, 0.15);
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
+  position: relative;
+}
+
+.service-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 50px 100px rgba(0, 0, 0, 0.18);
+}
+
+/* ICON */
+
+.service-icon {
+  width: 56px;
+  height: 56px;
+  background: var(--pepa-yellow);
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  margin-bottom: 22px;
+}
+
+/* TITLE */
+
+.service-card h3 {
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: var(--dark);
+  margin-bottom: 12px;
+}
+
+/* DESC */
+
+.service-card p {
+  font-size: 0.95rem;
+  color: #374151;
+  line-height: 1.7;
+  margin-bottom: 18px;
+}
+
+/* LIST */
+
+.service-card ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.service-card li {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #111827;
+  margin-bottom: 8px;
+}
+
+/* HIGHLIGHT */
+
+.service-card.highlight {
+  border: 2px solid var(--pepa-yellow);
+  transform: scale(1.03);
+}
+
+.service-card.highlight:hover {
+  transform: scale(1.05) translateY(-10px);
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media (max-width: 1024px) {
+  .services-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .services-section {
+    padding: 80px 0;
+  }
+
+  .services-grid {
+    grid-template-columns: 1fr;
+    gap: 26px;
+  }
+
+  .service-card {
+    padding: 34px 26px;
+  }
+
+  .service-card h3 {
+    font-size: 1.15rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .services-section {
+    padding: 70px 0;
+  }
+
+  .service-icon {
+    width: 50px;
+    height: 50px;
+    font-size: 1.2rem;
+  }
+
+  .service-card {
+    padding: 30px 22px;
+  }
+}
