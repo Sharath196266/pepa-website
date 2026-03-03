@@ -19,7 +19,6 @@ const Contact = () => {
       setForm((prev) => ({ ...prev, email: storedEmail }));
       sessionStorage.removeItem("newsletterEmail");
 
-      // Focus on name input after scroll
       setTimeout(() => {
         nameRef.current?.focus();
       }, 300);
@@ -33,8 +32,34 @@ const Contact = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    alert("Message sent successfully!");
-    setForm({ name: "", email: "", phone: "", message: "" });
+    const phoneNumber = "917760757383"; // your WhatsApp number (without +)
+
+    const message = `
+Hello PEPA,
+
+I am ${form.name}.
+My phone number is ${form.phone}.
+${form.email ? `My email is ${form.email}.` : ""}
+
+I would like to say:
+${form.message}
+
+Thank you.
+`;
+
+    const encodedMessage = encodeURIComponent(message);
+
+    const whatsappURL = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
+
+    window.open(whatsappURL, "_blank");
+
+    // Clear form
+    setForm({
+      name: "",
+      email: "",
+      phone: "",
+      message: "",
+    });
   };
 
   return (
