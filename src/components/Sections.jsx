@@ -1045,7 +1045,7 @@ export const FAQ = () => {
       <style>{`
         .faq-page {
           padding: 100px 0;
-          background: #ffffff;
+          background: radial-gradient(circle at top right, rgba(254, 224, 100, 0.35), #ffffff 70%);
           overflow: hidden;
         }
 
