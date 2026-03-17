@@ -56,6 +56,12 @@ const Footer = () => {
           text-transform: uppercase;
           letter-spacing: -1px;
           margin: 0;
+          text-shadow: 
+    
+    
+     0.5px  0.5px 0 #000;
+  
+  transition: text-shadow 0.3s ease; 
         }
 
         .footer-brand h3 span { color: #fee064; }
