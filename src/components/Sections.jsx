@@ -363,63 +363,235 @@ export const Services = () => {
 /* ================= ABOUT ================= */
 
 export const About = () => {
+  const sectionRef = useRef(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('active');
+          } else {
+            entry.target.classList.remove('active');
+          }
+        });
+      },
+      { threshold: 0.2 }
+    );
+
+    const elements = sectionRef.current.querySelectorAll('.reveal-el');
+    elements.forEach((el) => observer.observe(el));
+
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <section className="about-section" id="about">
+    <section className="about-section" id="about" ref={sectionRef}>
+      <style>{`
+        .about-section {
+          padding: 100px 0;
+          background: radial-gradient(circle at top right, rgba(254, 224, 100, 0.35), #ffffff 70%);
+          overflow: hidden;
+        }
 
-      <div className="about-container">
+        .about-container {
+          display: grid;
+          grid-template-columns: 1fr;
+          gap: 60px;
+          align-items: center;
+        }
 
-        {/* LEFT */}
-        <div className="about-left">
-          <span className="about-badge">About Us</span>
+        @media (min-width: 1024px) {
+          .about-container {
+            grid-template-columns: 1.1fr 0.9fr;
+          }
+        }
 
-          <h2 className="about-title">
-            Branding Solutions <span>Experts</span>
-          </h2>
+        /* --- LEFT CONTENT --- */
+        .reveal-el {
+          opacity: 0;
+          transform: translateY(30px);
+          transition: all 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+        }
 
-          <p className="about-text">
-            At <strong>PEPA Branding Solutions</strong>, we help businesses
-            transform ideas into powerful digital brands. We combine strategy,
-            creativity, and performance marketing to deliver measurable growth.
-          </p>
+        .reveal-el.active {
+          opacity: 1;
+          transform: translateY(0);
+        }
 
-          <p className="about-text">
-            From SEO and social media to branding and paid advertising, our team
-            focuses on building strong online presence, high engagement, and
-            consistent lead generation.
-          </p>
+        .about-title {
+          font-size: clamp(2.5rem, 6vw, 4rem);
+          font-weight: 950;
+          text-transform: uppercase;
+          letter-spacing: -2px;
+          line-height: 1;
+          margin: 20px 0;
+        }
 
-          <ul className="about-points">
-            <li>✔ Result-driven digital marketing</li>
-            <li>✔ Custom strategies for every business</li>
-            <li>✔ Transparent reporting</li>
-            <li>✔ Dedicated growth experts</li>
-          </ul>
-        </div>
+        .about-title span {
+          color: var(--pepa-yellow);
+          -webkit-text-stroke: 1px var(--dark);
+        }
 
-        {/* RIGHT */}
-        <div className="about-right">
-          <div className="about-card">
-            <h3>Our Mission</h3>
-            <p>
-              Empower businesses with digital strategies that generate
-              sustainable growth.
+        .about-text {
+          font-size: 1.1rem;
+          color: #4b5563;
+          line-height: 1.7;
+          margin-bottom: 25px;
+        }
+
+        .about-points {
+          list-style: none;
+          padding: 0;
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 15px;
+        }
+
+        .about-points li {
+          font-weight: 800;
+          font-size: 0.85rem;
+          text-transform: uppercase;
+          display: flex;
+          align-items: center;
+          gap: 10px;
+        }
+
+        .about-points li::before {
+          content: '✓';
+          color: var(--dark);
+          background: var(--pepa-yellow);
+          width: 20px;
+          height: 20px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border-radius: 50%;
+          font-size: 0.6rem;
+        }
+
+        /* --- RIGHT GEOMETRIC CARDS --- */
+        .about-right {
+          position: relative;
+          display: flex;
+          flex-direction: column;
+          gap: 20px;
+        }
+
+        .about-card {
+          background: white;
+          padding: 40px;
+          border-radius: 0 40px 0 40px;
+          border: 1px solid rgba(0,0,0,0.05);
+          box-shadow: 0 20px 40px rgba(0,0,0,0.05);
+          transition: 0.4s ease;
+          position: relative;
+          overflow: hidden;
+        }
+
+        .about-card:hover {
+          transform: translateX(-10px);
+          border-color: var(--pepa-yellow);
+        }
+
+        .about-card.mission {
+          border-left: 8px solid var(--pepa-yellow);
+        }
+
+        .about-card.vision {
+          background: var(--dark);
+          color: white;
+          border-left: 8px solid var(--pepa-yellow);
+          align-self: flex-end;
+          width: 90%;
+        }
+
+        .about-card h3 {
+          font-size: 1.5rem;
+          font-weight: 900;
+          text-transform: uppercase;
+          margin-bottom: 10px;
+        }
+
+        .about-card p {
+          font-size: 0.95rem;
+          opacity: 0.8;
+          line-height: 1.6;
+        }
+
+        /* Decorative Ghost Text */
+        .ghost-bg {
+          position: absolute;
+          font-size: 8rem;
+          font-weight: 900;
+          color: rgba(0,0,0,0.02);
+          bottom: -20px;
+          left: -10px;
+          z-index: 0;
+          pointer-events: none;
+        }
+
+        @media (max-width: 768px) {
+          .about-points { grid-template-columns: 1fr; }
+          .about-card.vision { width: 100%; align-self: flex-start; }
+        }
+      `}</style>
+
+      <div className="page-wrap">
+        <div className="about-container">
+          
+          {/* Left Side */}
+          <div className="about-left">
+            <span className="contact-badge reveal-el">ABOUT THE AGENCY</span>
+            <h2 className="about-title reveal-el">
+              Branding Solutions <br /> <span>Experts</span>
+            </h2>
+            
+            <p className="about-text reveal-el">
+              At <strong>PEPA Branding Solutions</strong>, we help businesses
+              transform ideas into powerful digital brands. We combine strategy,
+              creativity, and performance marketing to deliver measurable growth.
             </p>
+
+            <p className="about-text reveal-el">
+              From SEO and social media to branding and paid advertising, our team
+              focuses on building a strong online presence and high engagement.
+            </p>
+
+            <ul className="about-points reveal-el">
+              <li>Result-driven marketing</li>
+              <li>Custom strategies</li>
+              <li>Transparent reporting</li>
+              <li>Dedicated experts</li>
+            </ul>
           </div>
 
-          <div className="about-card">
-            <h3>Our Vision</h3>
-            <p>
-              Become a trusted digital growth partner for brands worldwide.
-            </p>
-          </div>
-        </div>
+          {/* Right Side */}
+          <div className="about-right">
+            <div className="ghost-bg">PEPA</div>
+            
+            <div className="about-card mission reveal-el">
+              <h3>Our Mission</h3>
+              <p>
+                Empower businesses with digital strategies that generate
+                sustainable growth and long-term brand value.
+              </p>
+            </div>
 
+            <div className="about-card vision reveal-el">
+              <h3>Our Vision</h3>
+              <p>
+                To become the global standard for digital growth, bridging the gap between 
+                ambitious ideas and market-dominating brands.
+              </p>
+            </div>
+          </div>
+
+        </div>
       </div>
-
     </section>
   );
 };
-
 
 /* ================= WORK ================= */
 
