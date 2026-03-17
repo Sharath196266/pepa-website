@@ -447,13 +447,28 @@ export const Work = () => {
     return () => observer.disconnect();
   }, []);
 
+  // --- 3D TILT LOGIC ---
+  const handleMouseMove = (e, card) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+    
+    // Calculate rotation (higher number = more tilt)
+    const rotateX = ((y - centerY) / centerY) * -15; 
+    const rotateY = ((x - centerX) / centerX) * 15;
+
+    e.currentTarget.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.05, 1.05, 1.05)`;
+  };
+
+  const handleMouseLeave = (e) => {
+    e.currentTarget.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
+  };
+
   const works = [
-    { 
-      title: "Brand Campaigns", 
-      size: "large", 
-      details: "Comprehensive brand positioning and visual storytelling.",
-      images: ["https://images.unsplash.com/photo-1551434678-e076c223a692?w=800"] 
-    },
+    { title: "Brand Campaigns", size: "large", details: "Comprehensive brand positioning and visual storytelling." },
     { 
       title: "Web Development", 
       size: "small", 
@@ -467,7 +482,7 @@ export const Work = () => {
     { title: "E-commerce Marketing", size: "medium", details: "Conversion-optimized funnels for online retail." },
     { title: "Lead Gen Funnels", size: "medium", details: "B2B and B2C automated lead acquisition systems." },
     { title: "Video Marketing", size: "small", details: "Cinematic short-form and long-form video content." },
-    { title: "Corporate Gifting", size: "large", details: "Bespoke gifting solutions for employee engagement and client relations." }
+    { title: "Corporate Gifting", size: "large", details: "Bespoke gifting solutions for employee engagement." }
   ];
 
   return (
@@ -476,100 +491,110 @@ export const Work = () => {
         .work-section {
           padding: 100px 0;
           background: radial-gradient(circle at top right, rgba(254, 224, 100, 0.35), #ffffff 70%);
-          overflow: hidden;text-align: center;
-          position: relative;
+          overflow: hidden;
+          perspective: 1500px;
         }
 
         .work-grid {
           display: grid;
           grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-          gap: 20px;
+          gap: 25px;
           margin-top: 50px;
+          transform-style: preserve-3d;
         }
 
         .work-card {
           opacity: 0;
-          transform: translateY(30px);
-          transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
           background: white;
-          border: 1px solid #f3f4f6;
-          border-radius: 24px;
-          padding: 40px;
+          border: 1px solid rgba(0,0,0,0.05);
+          border-radius: 30px;
+          padding: 45px;
           text-align: left;
           position: relative;
-          overflow: hidden;
           display: flex;
           flex-direction: column;
           justify-content: flex-end;
-          min-height: 250px;
+          min-height: 280px;
           cursor: pointer;
+          transition: transform 0.15s ease-out, opacity 0.8s ease, border-color 0.3s ease;
+          transform-style: preserve-3d; /* Allows child elements to float in 3D */
         }
 
-        .work-card.active { opacity: 1; transform: translateY(0); }
+        /* --- MOBILE ANIMATION (FADE & SLIDE UP) --- */
+        @media (max-width: 768px) {
+          .work-card {
+            opacity: 0;
+            transform: translateY(50px) scale(0.9);
+            transition: all 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+          }
+          .work-card.active {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+          }
+        }
+
+        .work-card.active { opacity: 1; }
 
         .work-card:hover {
           border-color: var(--pepa-yellow);
-          box-shadow: 0 30px 60px rgba(0,0,0,0.1);
-          transform: scale(1.02);
+          box-shadow: 0 40px 80px rgba(0,0,0,0.1);
         }
 
-        .work-card h3 { font-size: 1.5rem; font-weight: 900; text-transform: uppercase; z-index: 2; }
-        .work-card p { font-size: 0.85rem; color: #6b7280; margin-top: 10px; z-index: 2; }
-
-        /* --- MODAL STYLES --- */
-        .work-modal-overlay {
-          position: fixed;
-          inset: 0;
-          background: rgba(0,0,0,0.8);
-          backdrop-filter: blur(8px);
-          z-index: 1000;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          padding: 20px;
-          animation: fadeIn 0.3s ease;
+        /* 3D Floating Text */
+        .work-card h3 { 
+          font-size: 1.6rem; 
+          font-weight: 950; 
+          text-transform: uppercase; 
+          transform: translateZ(50px); /* Lifts text off the card */
+        }
+        
+        .work-card p { 
+          font-size: 0.9rem; 
+          color: #6b7280; 
+          transform: translateZ(30px); 
         }
 
-        .work-modal-content {
-          background: white;
-          max-width: 800px;
-          width: 100%;
-          border-radius: 32px;
-          padding: 40px;
-          position: relative;
-          text-align: left;
-          box-shadow: 0 50px 100px rgba(0,0,0,0.5);
-        }
-
-        .close-modal {
+        /* Background Ghosting */
+        .work-card::before {
+          content: 'PEPA';
           position: absolute;
           top: 20px;
           right: 20px;
-          background: #f3f4f6;
-          border: none;
-          width: 40px;
-          height: 40px;
-          border-radius: 50%;
-          cursor: pointer;
-          font-weight: bold;
+          font-size: 4rem;
+          font-weight: 900;
+          color: rgba(0,0,0,0.03);
+          transform: translateZ(10px);
         }
 
-        .modal-link {
-          display: inline-block;
-          margin-top: 20px;
-          margin-right: 15px;
-          padding: 12px 24px;
-          background: var(--dark);
-          color: white;
-          border-radius: 999px;
-          text-decoration: none;
-          font-weight: 700;
-          transition: 0.3s;
+        /* Modal dimming layer */
+        .scrim {
+          position: fixed;
+          inset: 0;
+          background: rgba(0,0,0,0.4);
+          backdrop-filter: blur(10px);
+          z-index: 1500;
+          opacity: 0;
+          pointer-events: none;
+          transition: opacity 0.4s ease;
         }
+        .scrim.show { opacity: 1; pointer-events: auto; }
 
-        .modal-link:hover { background: var(--pepa-yellow); color: var(--dark); }
-
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .floating-message {
+          position: fixed;
+          bottom: 40px;
+          left: 50%;
+          transform: translateX(-50%) translateY(200%);
+          width: 90%;
+          max-width: 500px;
+          background: white;
+          padding: 40px;
+          border-radius: 35px;
+          z-index: 2000;
+          transition: transform 0.6s cubic-bezier(0.19, 1, 0.22, 1);
+          box-shadow: 0 30px 100px rgba(0,0,0,0.3);
+          text-align: left;
+        }
+        .floating-message.open { transform: translateX(-50%) translateY(0); }
 
         @media (min-width: 1024px) {
           .work-grid { grid-template-columns: repeat(3, 1fr); }
@@ -578,26 +603,23 @@ export const Work = () => {
       `}</style>
 
       <div className="page-wrap">
-        <span className="contact-badge" style={{ background: 'var(--pepa-yellow)', padding: '5px 15px', borderRadius: '99px', fontSize: '0.65rem', fontWeight: '800' }}>
-          OUR PORTFOLIO
-        </span>
-
-        <h2 className="work-title">
-          Selected <span>Projects</span>
-        </h2>
+        <span className="contact-badge">The Roadmap</span>
+        <h2 className="work-title">Selected <span>Projects</span></h2>
 
         <div className="work-grid">
           {works.map((item, i) => (
             <div 
               key={i} 
               className={`work-card ${item.size}`}
-              style={{ transitionDelay: `${i * 0.1}s` }}
+              onMouseMove={handleMouseMove}
+              onMouseLeave={handleMouseLeave}
               onClick={() => setActiveProject(item)}
             >
               <h3>{item.title}</h3>
-              <p>Click to explore our impact in this domain.</p>
+              <p>Explore impact →</p>
+              
               <div style={{
-                position: 'absolute', top: 0, right: 0, width: '40px', height: '40px',
+                position: 'absolute', top: 0, right: 0, width: '60px', height: '60px',
                 background: 'var(--pepa-yellow)', clipPath: 'polygon(100% 0, 0 0, 100% 100%)', opacity: 0.1
               }}></div>
             </div>
@@ -605,35 +627,28 @@ export const Work = () => {
         </div>
       </div>
 
-      {/* --- MODAL RENDERING --- */}
-      {activeProject && (
-        <div className="work-modal-overlay" onClick={() => setActiveProject(null)}>
-          <div className="work-modal-content" onClick={e => e.stopPropagation()}>
-            <button className="close-modal" onClick={() => setActiveProject(null)}>✕</button>
-            <span style={{ color: 'var(--pepa-yellow)', fontWeight: '800', fontSize: '0.8rem' }}>PROJECT DETAILS</span>
-            <h2 style={{ fontSize: '2.5rem', fontWeight: '900', margin: '10px 0' }}>{activeProject.title}</h2>
-            <p style={{ color: '#4b5563', lineHeight: '1.6', fontSize: '1.1rem' }}>{activeProject.details}</p>
-            
-            {activeProject.links && (
-              <div style={{ marginTop: '20px' }}>
-                {activeProject.links.map((link, idx) => (
-                  <a key={idx} href={link.url} target="_blank" rel="noreferrer" className="modal-link">
-                    {link.name} ↗
-                  </a>
-                ))}
-              </div>
-            )}
+      <div className={`scrim ${activeProject ? 'show' : ''}`} onClick={() => setActiveProject(null)}></div>
 
-            {/* Placeholder for project frames/images */}
-            <div style={{ marginTop: '30px', background: '#f9fafb', borderRadius: '20px', height: '200px', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '2px dashed #e5e7eb' }}>
-              <p style={{ color: '#9ca3af' }}>[ Image / Web Frame Preview for {activeProject.title} ]</p>
-            </div>
-          </div>
-        </div>
-      )}
+      <div className={`floating-message ${activeProject ? 'open' : ''}`}>
+        {activeProject && (
+          <>
+            <button onClick={() => setActiveProject(null)} style={{position:'absolute', top:'20px', right:'20px', background:'none', border:'none', fontSize:'1.5rem', cursor:'pointer'}}>✕</button>
+            <h3 style={{fontSize:'1.8rem', fontWeight:900, textTransform:'uppercase'}}>{activeProject.title}</h3>
+            <p style={{color:'#4b5563', margin:'15px 0', lineHeight:1.6}}>{activeProject.details}</p>
+            {activeProject.links && activeProject.links.map((l, idx) => (
+              <a key={idx} href={l.url} target="_blank" rel="noreferrer" 
+                 style={{display:'inline-block', background:'var(--pepa-yellow)', padding:'10px 20px', borderRadius:'99px', textDecoration:'none', color:'var(--dark)', fontWeight:800, marginRight:'10px', marginTop:'10px'}}>
+                {l.name} ↗
+              </a>
+            ))}
+          </>
+        )}
+      </div>
     </section>
   );
 };
+
+
 export const Achievements = () => {
 
   const stats = [
