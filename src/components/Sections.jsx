@@ -474,9 +474,9 @@ export const Work = () => {
     <section className="work-section" id="work" ref={sectionRef}>
       <style>{`
         .work-section {
-          padding: 80px 0;
-          background: radial-gradient(circle at center, rgba(254, 224, 100, 0.05), #ffffff 80%);
-          text-align: center;
+          padding: 100px 0;
+          background: radial-gradient(circle at top right, rgba(254, 224, 100, 0.35), #ffffff 70%);
+          overflow: hidden;text-align: center;
           position: relative;
         }
 
