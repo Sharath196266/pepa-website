@@ -996,82 +996,226 @@ export const Achievements = () => {
 };
 
 /* ================= FAQ ================= */
+
+
 export const FAQ = () => {
+  const sectionRef = useRef(null);
+  const [activeIndex, setActiveIndex] = useState(0); // Default to first item
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) entry.target.classList.add('active-el');
+          else entry.target.classList.remove('active-el');
+        });
+      },
+      { threshold: 0.1 }
+    );
+    const elements = sectionRef.current?.querySelectorAll('.reveal-el');
+    elements?.forEach((el) => observer.observe(el));
+    return () => observer.disconnect();
+  }, []);
 
   const faqs = [
     {
-      question: "Do you work with startups and small businesses?",
-      answer:
-        "Yes. We work with startups, SMEs, and enterprises. Every strategy is customized based on your goals and budget."
+      question: "Do you work with startups?",
+      answer: "Yes. We work with startups, SMEs, and enterprises. Every strategy is customized based on your specific growth goals, budget, and market stage."
     },
     {
       question: "Is SEO included in all plans?",
-      answer:
-        "SEO is included in Professional and Premium plans. Add-on SEO services are also available."
+      answer: "SEO is standard in our Professional and Premium tiers. We also offer specialized SEO audits as standalone add-ons for brands looking for quick technical wins."
     },
     {
       question: "How soon can I see results?",
-      answer:
-        "Most clients begin to see measurable growth within 60–90 days depending on the service and competition."
+      answer: "Most clients observe measurable digital growth within 60–90 days, depending on market competition and the intensity of the strategies deployed."
     },
     {
-      question: "Do you provide custom branding strategies?",
-      answer:
-        "Yes. We analyze your business, audience, and competitors to build a fully customized branding and marketing roadmap."
+      question: "Do you provide custom branding?",
+      answer: "Absolutely. We conduct deep market analysis to build a cinematic brand roadmap that separates you from the competition and builds long-term authority."
     },
     {
       question: "Can I upgrade my plan later?",
-      answer:
-        "Absolutely. You can upgrade, downgrade, or add services at any time."
+      answer: "Yes. Our partnership models are flexible. You can scale your services up or down as your business evolves and your marketing needs grow."
     }
   ];
 
-  const [activeIndex, setActiveIndex] = useState(null);
-
-  const toggleFaq = (index) => {
-    setActiveIndex(activeIndex === index ? null : index);
-  };
-
   return (
-    <section className="faq-page" id="faqs">
-      <div className="faq-container">
+    <section className="faq-page" id="faqs" ref={sectionRef}>
+      <style>{`
+        .faq-page {
+          padding: 100px 0;
+          background: #ffffff;
+          overflow: hidden;
+        }
 
-        {/* LEFT */}
-        <div className="faq-left">
-          <span className="faq-badge">FAQs</span>
+        .faq-title-area {
+          text-align: center;
+          margin-bottom: 60px;
+        }
 
-          <h2 className="faq-heading">
-            Frequently Asked <span>Questions</span>
+        /* --- DESKTOP DASHBOARD LAYOUT --- */
+        .faq-dashboard {
+          display: grid;
+          grid-template-columns: 1fr;
+          gap: 40px;
+          max-width: 1200px;
+          margin: 0 auto;
+          align-items: start;
+        }
+
+        @media (min-width: 1024px) {
+          .faq-dashboard {
+            grid-template-columns: 1fr 1.2fr;
+            background: #fcfcfc;
+            padding: 40px;
+            border-radius: 40px;
+            border: 1px solid #f3f4f6;
+          }
+        }
+
+        /* --- QUESTION LIST --- */
+        .faq-list {
+          display: flex;
+          flex-direction: column;
+          gap: 10px;
+        }
+
+        .faq-btn {
+          width: 100%;
+          padding: 24px;
+          text-align: left;
+          background: white;
+          border: 1px solid #f3f4f6;
+          border-radius: 20px;
+          font-size: 1rem;
+          font-weight: 800;
+          color: var(--dark);
+          cursor: pointer;
+          transition: all 0.4s ease;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          text-transform: uppercase;
+        }
+
+        .faq-btn.active {
+          background: var(--dark);
+          color: white;
+          border-color: var(--dark);
+          transform: translateX(10px);
+        }
+
+        .faq-btn span {
+          color: var(--pepa-yellow);
+          font-size: 1.2rem;
+          transition: 0.4s;
+        }
+
+        .faq-btn.active span { transform: rotate(45deg); }
+
+        /* --- ANSWER DISPLAY PANEL --- */
+        .faq-display-panel {
+          position: sticky;
+          top: 120px;
+          background: white;
+          padding: 60px 40px;
+          border-radius: 30px;
+          min-height: 350px;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          box-shadow: 0 30px 60px rgba(0,0,0,0.05);
+          border-right: 10px solid var(--pepa-yellow);
+          /* Geometric Cut */
+          clip-path: polygon(0% 0%, 100% 0%, 100% 90%, 90% 100%, 0% 100%);
+        }
+
+        .display-title {
+          font-size: 1.8rem;
+          font-weight: 950;
+          margin-bottom: 20px;
+          line-height: 1.2;
+          color: var(--dark);
+        }
+
+        .display-text {
+          font-size: 1.1rem;
+          line-height: 1.8;
+          color: #6b7280;
+        }
+
+        /* --- MOBILE ADAPTATION --- */
+        @media (max-width: 1023px) {
+          .faq-display-panel {
+            display: none; /* Hide side panel on mobile */
+          }
+          .mobile-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            font-size: 0.95rem;
+            color: #6b7280;
+            padding: 0 24px;
+          }
+          .faq-btn.active + .mobile-answer {
+            max-height: 200px;
+            padding: 10px 24px 24px;
+          }
+        }
+
+        /* --- REVEAL ANIMATIONS --- */
+        .reveal-el {
+          opacity: 0;
+          transform: translateY(20px);
+          transition: all 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .reveal-el.active-el { opacity: 1; transform: translateY(0); }
+      `}</style>
+
+      <div className="page-wrap">
+        <div className="faq-title-area reveal-el">
+          <span className="contact-badge">KNOWLEDGE</span>
+          <h2 className="services-heading" style={{fontSize: 'clamp(2.5rem, 6vw, 4rem)', fontWeight: 950}}>
+            COMMON <span>QUESTIONS</span>
           </h2>
-
-          <p className="faq-description">
-            Everything you need to know about working with PEPA Branding Solutions.
-            Can't find an answer? Contact our team anytime.
-          </p>
         </div>
 
-        {/* RIGHT */}
-        <div className="faq-right">
-          {faqs.map((faq, index) => (
-            <div
-              key={index}
-              className={`faq-item ${activeIndex === index ? "active" : ""}`}
-            >
-              <button
-                className="faq-question"
-                onClick={() => toggleFaq(index)}
-              >
-                {faq.question}
-                <span>+</span>
-              </button>
+        <div className="faq-dashboard reveal-el">
+          
+          {/* Left Column: Question Buttons */}
+          <div className="faq-list">
+            {faqs.map((faq, index) => (
+              <React.Fragment key={index}>
+                <button
+                  className={`faq-btn ${activeIndex === index ? 'active' : ''}`}
+                  onClick={() => setActiveIndex(index)}
+                >
+                  {faq.question}
+                  <span>+</span>
+                </button>
+                {/* Mobile Answer Reveal */}
+                <div className="mobile-answer">
+                  {faq.answer}
+                </div>
+              </React.Fragment>
+            ))}
+          </div>
 
-              <div className="faq-answer">
-                {faq.answer}
-              </div>
+          {/* Right Column: Information Panel (Desktop Only) */}
+          <div className="faq-display-panel">
+            <span style={{color: 'var(--pepa-yellow)', fontWeight: 900, fontSize: '0.7rem', letterSpacing: '2px'}}>EXPERT ANSWER</span>
+            <h3 className="display-title">{faqs[activeIndex].question}</h3>
+            <p className="display-text">{faqs[activeIndex].answer}</p>
+            
+            <div style={{marginTop: '30px'}}>
+              <a href="#contact" style={{textDecoration: 'none', color: 'var(--dark)', fontWeight: 800, fontSize: '0.85rem'}}>
+                STILL HAVE QUESTIONS? <span style={{color: 'var(--pepa-yellow)'}}>ASK PEPA →</span>
+              </a>
             </div>
-          ))}
-        </div>
+          </div>
 
+        </div>
       </div>
     </section>
   );
