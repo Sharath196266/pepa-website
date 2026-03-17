@@ -425,6 +425,7 @@ export const About = () => {
 
 export const Work = () => {
   const sectionRef = useRef(null);
+  const [activeProject, setActiveProject] = useState(null);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -440,156 +441,199 @@ export const Work = () => {
       { threshold: 0.1 }
     );
 
-    const cards = sectionRef.current.querySelectorAll('.work-card');
-    cards.forEach((card) => observer.observe(card));
+    const cards = sectionRef.current?.querySelectorAll('.work-card');
+    cards?.forEach((card) => observer.observe(card));
 
     return () => observer.disconnect();
   }, []);
 
   const works = [
-    { title: "Brand Campaigns", offset: "-40px" },
-    { title: "Corporate Websites", offset: "40px" },
-    { title: "Social Growth", offset: "-40px" },
-    { title: "E-comm Marketing", offset: "40px" },
-    { title: "Lead Funnels", offset: "-40px" },
-    { title: "Video Marketing", offset: "40px" }
+    { 
+      title: "Brand Campaigns", 
+      size: "large", 
+      details: "Comprehensive brand positioning and visual storytelling.",
+      images: ["https://images.unsplash.com/photo-1551434678-e076c223a692?w=800"] 
+    },
+    { 
+      title: "Web Development", 
+      size: "small", 
+      details: "High-performance web applications. Featured: Green City Degree College projects.",
+      links: [
+        { name: "Live Site 1", url: "https://greencitydegreecollege.in" },
+        { name: "Live Site 2", url: "https://gcdc.pages.dev/" }
+      ]
+    },
+    { title: "Social Media Growth", size: "small", details: "Organic and paid strategies for community building." },
+    { title: "E-commerce Marketing", size: "medium", details: "Conversion-optimized funnels for online retail." },
+    { title: "Lead Gen Funnels", size: "medium", details: "B2B and B2C automated lead acquisition systems." },
+    { title: "Video Marketing", size: "small", details: "Cinematic short-form and long-form video content." },
+    { title: "Corporate Gifting", size: "large", details: "Bespoke gifting solutions for employee engagement and client relations." }
   ];
 
   return (
     <section className="work-section" id="work" ref={sectionRef}>
       <style>{`
         .work-section {
-          padding: 100px 0;
-          background: radial-gradient(circle at top right, rgba(254, 224, 100, 0.35), #ffffff 70%);
-          overflow: hidden;
-        }
-
-        .work-title {
-          font-size: clamp(2.5rem, 6vw, 4rem);
-          font-weight: 950;
-          text-transform: uppercase;
-          letter-spacing: -2px;
-          margin-bottom: 60px;
+          padding: 80px 0;
+          background: radial-gradient(circle at center, rgba(254, 224, 100, 0.05), #ffffff 80%);
           text-align: center;
+          position: relative;
         }
 
-        .work-title span {
-          color: var(--pepa-yellow);
-          -webkit-text-stroke: 1px var(--dark);
-        }
-
-        /* --- THE COMBINED SHAPE CONTAINER --- */
-        .work-stack {
-          display: flex;
-          flex-direction: column;
-          max-width: 900px;
-          margin: 0 auto;
-          /* Negative margin removes the vertical gaps between shapes */
-          gap: -2px; 
+        .work-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+          gap: 20px;
+          margin-top: 50px;
         }
 
         .work-card {
-          position: relative;
+          opacity: 0;
+          transform: translateY(30px);
+          transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
           background: white;
-          padding: 30px 60px;
-          min-height: 100px;
+          border: 1px solid #f3f4f6;
+          border-radius: 24px;
+          padding: 40px;
+          text-align: left;
+          position: relative;
+          overflow: hidden;
+          display: flex;
+          flex-direction: column;
+          justify-content: flex-end;
+          min-height: 250px;
+          cursor: pointer;
+        }
+
+        .work-card.active { opacity: 1; transform: translateY(0); }
+
+        .work-card:hover {
+          border-color: var(--pepa-yellow);
+          box-shadow: 0 30px 60px rgba(0,0,0,0.1);
+          transform: scale(1.02);
+        }
+
+        .work-card h3 { font-size: 1.5rem; font-weight: 900; text-transform: uppercase; z-index: 2; }
+        .work-card p { font-size: 0.85rem; color: #6b7280; margin-top: 10px; z-index: 2; }
+
+        /* --- MODAL STYLES --- */
+        .work-modal-overlay {
+          position: fixed;
+          inset: 0;
+          background: rgba(0,0,0,0.8);
+          backdrop-filter: blur(8px);
+          z-index: 1000;
           display: flex;
           align-items: center;
-          /* Interlocking Border */
-          border-left: 10px solid var(--pepa-yellow);
-          transition: all 0.9s cubic-bezier(0.16, 1, 0.3, 1);
-          opacity: 0;
-          
-          /* The Parallelogram Clip-Path */
-          clip-path: polygon(10% 0%, 100% 0%, 90% 100%, 0% 100%);
-          
-          /* Initial "Scattered" Position */
-          margin-top: -15px; /* Pulls cards together into one shape */
+          justify-content: center;
+          padding: 20px;
+          animation: fadeIn 0.3s ease;
         }
 
-        /* Desktop: Pieces slide in from left/right to lock in center */
-        .work-card:nth-child(odd) { transform: translateX(-120px) skewX(-5deg); }
-        .work-card:nth-child(even) { transform: translateX(120px) skewX(5deg); }
-
-        .work-card.active {
-          opacity: 1;
-          transform: translateX(0) skewX(0);
+        .work-modal-content {
+          background: white;
+          max-width: 800px;
+          width: 100%;
+          border-radius: 32px;
+          padding: 40px;
+          position: relative;
+          text-align: left;
+          box-shadow: 0 50px 100px rgba(0,0,0,0.5);
         }
 
-        /* Combined shape hover effect */
-        .work-card:hover {
+        .close-modal {
+          position: absolute;
+          top: 20px;
+          right: 20px;
+          background: #f3f4f6;
+          border: none;
+          width: 40px;
+          height: 40px;
+          border-radius: 50%;
+          cursor: pointer;
+          font-weight: bold;
+        }
+
+        .modal-link {
+          display: inline-block;
+          margin-top: 20px;
+          margin-right: 15px;
+          padding: 12px 24px;
           background: var(--dark);
           color: white;
-          z-index: 50;
-          transform: scale(1.05);
+          border-radius: 999px;
+          text-decoration: none;
+          font-weight: 700;
+          transition: 0.3s;
         }
 
-        .work-card h3 {
-          font-size: clamp(1.1rem, 3vw, 1.8rem);
-          font-weight: 900;
-          text-transform: uppercase;
-          letter-spacing: -1px;
-        }
+        .modal-link:hover { background: var(--pepa-yellow); color: var(--dark); }
 
-        .work-number {
-          font-size: 3.5rem;
-          font-weight: 950;
-          color: rgba(0,0,0,0.03);
-          margin-right: 30px;
-          transition: 0.5s;
-        }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        .work-card.active:hover .work-number {
-          color: rgba(254, 224, 100, 0.2);
-        }
-
-        /* MOBILE OPTIMIZATION */
-        @media (max-width: 768px) {
-          .work-stack { padding: 0 10px; }
-          .work-card {
-            padding: 20px 40px;
-            clip-path: polygon(8% 0%, 100% 0%, 92% 100%, 0% 100%);
-            margin-top: -10px;
-          }
-          /* On mobile, slide from bottom for a cleaner feel */
-          .work-card:nth-child(odd), .work-card:nth-child(even) { 
-            transform: translateY(50px); 
-          }
-          .work-card.active { transform: translateY(0); }
+        @media (min-width: 1024px) {
+          .work-grid { grid-template-columns: repeat(3, 1fr); }
+          .work-card.large { grid-column: span 2; }
         }
       `}</style>
 
       <div className="page-wrap">
-        <div style={{ textAlign: 'center', marginBottom: '40px' }}>
-          <span className="contact-badge">Portfolio</span>
-          <h2 className="work-title">
-            SELECTED <span>PROJECTS</span>
-          </h2>
-        </div>
+        <span className="contact-badge" style={{ background: 'var(--pepa-yellow)', padding: '5px 15px', borderRadius: '99px', fontSize: '0.65rem', fontWeight: '800' }}>
+          OUR PORTFOLIO
+        </span>
 
-        <div className="work-stack">
+        <h2 className="work-title">
+          Selected <span>Projects</span>
+        </h2>
+
+        <div className="work-grid">
           {works.map((item, i) => (
             <div 
               key={i} 
-              className="work-card"
+              className={`work-card ${item.size}`}
               style={{ transitionDelay: `${i * 0.1}s` }}
+              onClick={() => setActiveProject(item)}
             >
-              <span className="work-number">0{i + 1}</span>
               <h3>{item.title}</h3>
-              
+              <p>Click to explore our impact in this domain.</p>
               <div style={{
-                marginLeft: 'auto',
-                fontSize: '1.5rem',
-                opacity: 0.4
-              }}>→</div>
+                position: 'absolute', top: 0, right: 0, width: '40px', height: '40px',
+                background: 'var(--pepa-yellow)', clipPath: 'polygon(100% 0, 0 0, 100% 100%)', opacity: 0.1
+              }}></div>
             </div>
           ))}
         </div>
       </div>
+
+      {/* --- MODAL RENDERING --- */}
+      {activeProject && (
+        <div className="work-modal-overlay" onClick={() => setActiveProject(null)}>
+          <div className="work-modal-content" onClick={e => e.stopPropagation()}>
+            <button className="close-modal" onClick={() => setActiveProject(null)}>✕</button>
+            <span style={{ color: 'var(--pepa-yellow)', fontWeight: '800', fontSize: '0.8rem' }}>PROJECT DETAILS</span>
+            <h2 style={{ fontSize: '2.5rem', fontWeight: '900', margin: '10px 0' }}>{activeProject.title}</h2>
+            <p style={{ color: '#4b5563', lineHeight: '1.6', fontSize: '1.1rem' }}>{activeProject.details}</p>
+            
+            {activeProject.links && (
+              <div style={{ marginTop: '20px' }}>
+                {activeProject.links.map((link, idx) => (
+                  <a key={idx} href={link.url} target="_blank" rel="noreferrer" className="modal-link">
+                    {link.name} ↗
+                  </a>
+                ))}
+              </div>
+            )}
+
+            {/* Placeholder for project frames/images */}
+            <div style={{ marginTop: '30px', background: '#f9fafb', borderRadius: '20px', height: '200px', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '2px dashed #e5e7eb' }}>
+              <p style={{ color: '#9ca3af' }}>[ Image / Web Frame Preview for {activeProject.title} ]</p>
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   );
 };
-
 export const Achievements = () => {
 
   const stats = [
