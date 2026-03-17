@@ -41,11 +41,13 @@ const Footer = () => {
         .footer-brand h3 {
           font-size: 1.6rem;
           font-weight: 950;
-          color: var(--dark);
+          color: #111827;
           margin-bottom: 15px;
           text-transform: uppercase;
           letter-spacing: -1px;
         }
+
+        .footer-brand h3 span { color: #fee064; }
 
         .footer-brand p {
           font-size: 0.95rem;
@@ -58,12 +60,14 @@ const Footer = () => {
           font-size: 0.8rem;
           font-weight: 900;
           text-transform: uppercase;
-          color: var(--dark);
+          color: #111827;
           margin-bottom: 20px;
           letter-spacing: 1.5px;
         }
 
-        .footer-col a {
+        .footer-links { display: flex; flex-direction: column; gap: 12px; }
+
+        .footer-links a {
           display: flex;
           align-items: center;
           gap: 8px;
@@ -71,22 +75,21 @@ const Footer = () => {
           font-weight: 700;
           color: #6b7280;
           text-decoration: none;
-          margin-bottom: 12px;
           transition: 0.3s;
         }
 
-        .footer-col a span {
-          color: var(--pepa-yellow);
+        .footer-links a span {
+          color: #fee064;
           font-size: 0.7rem;
           transition: transform 0.3s;
         }
 
-        .footer-col a:hover {
-          color: var(--dark);
+        .footer-links a:hover {
+          color: #111827;
           transform: translateX(5px);
         }
 
-        .footer-col a:hover span {
+        .footer-links a:hover span {
           transform: translate(2px, -2px);
         }
 
@@ -108,7 +111,7 @@ const Footer = () => {
         }
 
         .newsletter-form:focus-within {
-          border-color: var(--pepa-yellow);
+          border-color: #fee064;
           box-shadow: 0 0 0 4px rgba(254, 224, 100, 0.2);
         }
 
@@ -126,7 +129,7 @@ const Footer = () => {
           height: 36px;
           border-radius: 50%;
           border: none;
-          background: var(--dark);
+          background: #111827;
           color: #ffffff;
           font-size: 1.2rem;
           cursor: pointer;
@@ -137,8 +140,8 @@ const Footer = () => {
         }
 
         .newsletter-btn:hover {
-          background: var(--pepa-yellow);
-          color: var(--dark);
+          background: #fee064;
+          color: #111827;
           transform: scale(1.1);
         }
 
@@ -157,13 +160,12 @@ const Footer = () => {
         /* --- RESPONSIVE --- */
         @media (max-width: 1024px) {
           .footer-inner { grid-template-columns: 1fr 1fr; gap: 40px; }
-          .footer-brand, .footer-newsletter { grid-column: span 1; }
         }
 
         @media (max-width: 768px) {
           .footer-inner { grid-template-columns: 1fr; text-align: center; }
           .footer-brand p, .footer-newsletter p { margin: 0 auto 20px; }
-          .footer-col a { justify-content: center; }
+          .footer-links a { justify-content: center; }
           .newsletter-form { max-width: 350px; margin: 0 auto; }
         }
       `}</style>
@@ -191,13 +193,20 @@ const Footer = () => {
             </div>
           </div>
 
-          {/* SOCIALS */}
+          {/* UPDATED SOCIALS */}
           <div className="footer-col">
-            <h4>Socials</h4>
+            <h4>Connect</h4>
             <div className="footer-links">
+              <a href="https://www.instagram.com/pepasol_official?utm_source=qr&igsh=Y3BpeWMzbzZqZmg3" target="_blank" rel="noreferrer">
+                Instagram <span>↗</span>
+              </a>
+              <a href="https://www.facebook.com/share/1KETHaeyPr/" target="_blank" rel="noreferrer">
+                Facebook <span>↗</span>
+              </a>
+              <a href="https://x.com/PepasolOfficial?t=kW7EbDDnYvBtizCZwqNZEQ&s=08" target="_blank" rel="noreferrer">
+                X (Twitter) <span>↗</span>
+              </a>
               <a href="mailto:info@pepa.co.in">Email <span>↗</span></a>
-              <a href="#" target="_blank" rel="noreferrer">Instagram <span>↗</span></a>
-              <a href="#" target="_blank" rel="noreferrer">LinkedIn <span>↗</span></a>
             </div>
           </div>
 
