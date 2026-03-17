@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import logoImg from "../pepa_logo_1.png";
+import { useState,useRef, useEffect} from "react";
 
 const Footer = () => {
   const [email, setEmail] = useState("");
@@ -7,10 +8,7 @@ const Footer = () => {
     e.preventDefault();
     if (!email) return;
 
-    // Save email to session so the Contact component can auto-fill it
     sessionStorage.setItem("newsletterEmail", email);
-    
-    // Smooth scroll to contact
     window.location.href = "#contact";
     setEmail("");
   };
@@ -37,14 +35,27 @@ const Footer = () => {
           margin: 0 auto;
         }
 
-        /* --- BRANDING --- */
+        /* --- BRANDING LOGO + TITLE --- */
+        .footer-logo-group {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          margin-bottom: 15px;
+        }
+
+        .footer-logo-group img {
+          height: 1.8rem; /* Matches the h3 size */
+          width: auto;
+          object-fit: contain;
+        }
+
         .footer-brand h3 {
           font-size: 1.6rem;
           font-weight: 950;
-          color: #111827;
-          margin-bottom: 15px;
+          color:#fee064;
           text-transform: uppercase;
           letter-spacing: -1px;
+          margin: 0;
         }
 
         .footer-brand h3 span { color: #fee064; }
@@ -164,6 +175,7 @@ const Footer = () => {
 
         @media (max-width: 768px) {
           .footer-inner { grid-template-columns: 1fr; text-align: center; }
+          .footer-logo-group { justify-content: center; }
           .footer-brand p, .footer-newsletter p { margin: 0 auto 20px; }
           .footer-links a { justify-content: center; }
           .newsletter-form { max-width: 350px; margin: 0 auto; }
@@ -175,7 +187,10 @@ const Footer = () => {
           
           {/* BRAND */}
           <div className="footer-brand">
-            <h3>PEPA<span>.</span></h3>
+            <div className="footer-logo-group">
+              <img src={logoImg} alt="PEPA" />
+              <h3>PEPA<span>.</span></h3>
+            </div>
             <p>
               Strategic branding, digital marketing, and web development 
               engineered to help modern businesses dominate the digital landscape.
@@ -193,7 +208,7 @@ const Footer = () => {
             </div>
           </div>
 
-          {/* UPDATED SOCIALS */}
+          {/* CONNECT */}
           <div className="footer-col">
             <h4>Connect</h4>
             <div className="footer-links">

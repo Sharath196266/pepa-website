@@ -594,10 +594,8 @@ export const About = () => {
 };
 
 /* ================= WORK ================= */
-
 export const Work = () => {
   const sectionRef = useRef(null);
-  const [activeProject, setActiveProject] = useState(null);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -619,42 +617,33 @@ export const Work = () => {
     return () => observer.disconnect();
   }, []);
 
-  // --- 3D TILT LOGIC ---
-  const handleMouseMove = (e, card) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    
-    const centerX = rect.width / 2;
-    const centerY = rect.height / 2;
-    
-    // Calculate rotation (higher number = more tilt)
-    const rotateX = ((y - centerY) / centerY) * -15; 
-    const rotateY = ((x - centerX) / centerX) * 15;
-
-    e.currentTarget.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.05, 1.05, 1.05)`;
-  };
-
-  const handleMouseLeave = (e) => {
-    e.currentTarget.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
-  };
-
   const works = [
-    { title: "Brand Campaigns", size: "large", details: "Comprehensive brand positioning and visual storytelling." },
+    { 
+      title: "Brand Campaigns", 
+      size: "large", 
+      details: "Comprehensive brand positioning and visual storytelling.",
+      animType: "float-x" 
+    },
     { 
       title: "Web Development", 
       size: "small", 
-      details: "High-performance web applications. Featured: Green City Degree College projects.",
+      details: "High-performance SEO architecture for educational and corporate platforms.",
       links: [
         { name: "Live Site 1", url: "https://greencitydegreecollege.in" },
         { name: "Live Site 2", url: "https://gcdc.pages.dev/" }
-      ]
+      ],
+      animType: "float-y"
     },
-    { title: "Social Media Growth", size: "small", details: "Organic and paid strategies for community building." },
-    { title: "E-commerce Marketing", size: "medium", details: "Conversion-optimized funnels for online retail." },
-    { title: "Lead Gen Funnels", size: "medium", details: "B2B and B2C automated lead acquisition systems." },
-    { title: "Video Marketing", size: "small", details: "Cinematic short-form and long-form video content." },
-    { title: "Corporate Gifting", size: "large", details: "Bespoke gifting solutions for employee engagement." }
+    { title: "Social Growth", size: "small", details: "Turning followers into brand advocates with cinematic content.", animType: "float-x" },
+    { title: "E-comm Marketing", size: "medium", details: "Scaling stores through optimized conversion funnels.", animType: "float-y" },
+    { title: "Lead Gen Funnels", size: "medium", details: "Automated B2B systems for lead acquisition.", animType: "float-x" },
+    { title: "Video Marketing", size: "small", details: "High-impact short-form content that captures attention.", animType: "float-y" },
+    { 
+      title: "Corporate Gifting", 
+      size: "large", 
+      details: "Bespoke, branded gifting solutions for elite corporate engagement.",
+      animType: "float-x"
+    }
   ];
 
   return (
@@ -664,162 +653,150 @@ export const Work = () => {
           padding: 100px 0;
           background: radial-gradient(circle at top right, rgba(254, 224, 100, 0.35), #ffffff 70%);
           overflow: hidden;
-          perspective: 1500px;
         }
 
         .work-grid {
           display: grid;
           grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
           gap: 25px;
-          margin-top: 50px;
-          transform-style: preserve-3d;
+          max-width: 1200px;
+          margin: 0 auto;
         }
 
         .work-card {
           opacity: 0;
-          background: white;
-          border: 1px solid rgba(0,0,0,0.05);
+          background: rgba(255, 255, 255, 0.8);
+          backdrop-filter: blur(10px);
           border-radius: 30px;
-          padding: 45px;
-          text-align: left;
+          padding: 40px;
+          min-height: 280px;
           position: relative;
+          overflow: hidden;
           display: flex;
           flex-direction: column;
           justify-content: flex-end;
-          min-height: 280px;
-          cursor: pointer;
-          transition: transform 0.15s ease-out, opacity 0.8s ease, border-color 0.3s ease;
-          transform-style: preserve-3d; /* Allows child elements to float in 3D */
-        }
-
-        /* --- MOBILE ANIMATION (FADE & SLIDE UP) --- */
-        @media (max-width: 768px) {
-          .work-card {
-            opacity: 0;
-            transform: translateY(50px) scale(0.9);
-            transition: all 0.8s cubic-bezier(0.25, 1, 0.5, 1);
-          }
-          .work-card.active {
-            opacity: 1;
-            transform: translateY(0) scale(1);
-          }
+          border: 1px solid rgba(0,0,0,0.05);
+          transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .work-card.active { opacity: 1; }
 
+        /* --- IDLE MOVING ANIMATIONS --- */
+        .float-x { animation: floatX 6s ease-in-out infinite; }
+        .float-y { animation: floatY 8s ease-in-out infinite; }
+
+        @keyframes floatX {
+          0%, 100% { transform: translateX(0); }
+          50% { transform: translateX(15px); }
+        }
+
+        @keyframes floatY {
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(-15px); }
+        }
+
+        /* Stop animation on hover and change background */
         .work-card:hover {
+          animation-play-state: paused;
+          background: var(--dark); /* Matches the section's secondary dark theme */
+          color: white;
           border-color: var(--pepa-yellow);
-          box-shadow: 0 40px 80px rgba(0,0,0,0.1);
+          transform: scale(1.05) !important;
+          z-index: 10;
         }
 
-        /* 3D Floating Text */
-        .work-card h3 { 
-          font-size: 1.6rem; 
-          font-weight: 950; 
-          text-transform: uppercase; 
-          transform: translateZ(50px); /* Lifts text off the card */
-        }
-        
-        .work-card p { 
-          font-size: 0.9rem; 
-          color: #6b7280; 
-          transform: translateZ(30px); 
-        }
-
-        /* Background Ghosting */
-        .work-card::before {
-          content: 'PEPA';
-          position: absolute;
-          top: 20px;
-          right: 20px;
-          font-size: 4rem;
+        .work-card h3 {
+          font-size: 1.5rem;
           font-weight: 900;
-          color: rgba(0,0,0,0.03);
-          transform: translateZ(10px);
+          text-transform: uppercase;
+          transition: 0.3s;
         }
 
-        /* Modal dimming layer */
-        .scrim {
-          position: fixed;
-          inset: 0;
-          background: rgba(0,0,0,0.4);
-          backdrop-filter: blur(10px);
-          z-index: 1500;
+        /* --- INTERNAL CONTENT REVEAL --- */
+        .hover-content {
+          max-height: 0;
           opacity: 0;
-          pointer-events: none;
-          transition: opacity 0.4s ease;
+          overflow: hidden;
+          transition: all 0.5s ease;
         }
-        .scrim.show { opacity: 1; pointer-events: auto; }
 
-        .floating-message {
-          position: fixed;
-          bottom: 40px;
-          left: 50%;
-          transform: translateX(-50%) translateY(200%);
-          width: 90%;
-          max-width: 500px;
-          background: white;
-          padding: 40px;
-          border-radius: 35px;
-          z-index: 2000;
-          transition: transform 0.6s cubic-bezier(0.19, 1, 0.22, 1);
-          box-shadow: 0 30px 100px rgba(0,0,0,0.3);
-          text-align: left;
+        .work-card:hover .hover-content {
+          max-height: 200px;
+          opacity: 1;
+          margin-top: 15px;
         }
-        .floating-message.open { transform: translateX(-50%) translateY(0); }
+
+        .work-card:hover h3 {
+          color: var(--pepa-yellow);
+        }
+
+        .work-link-btn {
+          display: inline-block;
+          margin-top: 15px;
+          margin-right: 10px;
+          padding: 8px 16px;
+          background: var(--pepa-yellow);
+          color: var(--dark);
+          border-radius: 99px;
+          text-decoration: none;
+          font-size: 0.75rem;
+          font-weight: 800;
+          text-transform: uppercase;
+        }
 
         @media (min-width: 1024px) {
           .work-grid { grid-template-columns: repeat(3, 1fr); }
           .work-card.large { grid-column: span 2; }
         }
+
+        @media (max-width: 768px) {
+          .work-card { animation: none; transform: translateY(0); }
+        }
       `}</style>
 
       <div className="page-wrap">
-        <span className="contact-badge">The Roadmap</span>
-        <h2 className="work-title">Selected <span>Projects</span></h2>
+        <div style={{textAlign: 'center', marginBottom: '60px'}}>
+          <span className="contact-badge">Portfolio</span>
+          <h2 className="work-title" style={{fontSize: 'clamp(2.5rem, 6vw, 4rem)', fontWeight: 950, textTransform: 'uppercase'}}>
+            Selected <span>Projects</span>
+          </h2>
+        </div>
 
         <div className="work-grid">
           {works.map((item, i) => (
             <div 
               key={i} 
-              className={`work-card ${item.size}`}
-              onMouseMove={handleMouseMove}
-              onMouseLeave={handleMouseLeave}
-              onClick={() => setActiveProject(item)}
+              className={`work-card ${item.animType} ${item.size}`}
+              style={{transitionDelay: `${i * 0.1}s`}}
             >
               <h3>{item.title}</h3>
-              <p>Explore impact →</p>
               
+              <div className="hover-content">
+                <p style={{fontSize: '0.9rem', lineHeight: '1.5'}}>{item.details}</p>
+                <div style={{display: 'flex', gap: '10px', marginTop: '10px', flexWrap: 'wrap'}}>
+                  {item.links ? item.links.map((link, idx) => (
+                    <a key={idx} href={link.url} target="_blank" rel="noreferrer" className="work-link-btn">
+                      {link.name} ↗
+                    </a>
+                  )) : (
+                    <a href="#contact" className="work-link-btn">Enquire ↗</a>
+                  )}
+                </div>
+              </div>
+
+              {/* Decorative background ghost text */}
               <div style={{
-                position: 'absolute', top: 0, right: 0, width: '60px', height: '60px',
-                background: 'var(--pepa-yellow)', clipPath: 'polygon(100% 0, 0 0, 100% 100%)', opacity: 0.1
-              }}></div>
+                position: 'absolute', top: '10px', right: '10px',
+                fontSize: '4rem', fontWeight: 900, color: 'rgba(0,0,0,0.02)',
+                pointerEvents: 'none'
+              }}>PEPA</div>
             </div>
           ))}
         </div>
       </div>
-
-      <div className={`scrim ${activeProject ? 'show' : ''}`} onClick={() => setActiveProject(null)}></div>
-
-      <div className={`floating-message ${activeProject ? 'open' : ''}`}>
-        {activeProject && (
-          <>
-            <button onClick={() => setActiveProject(null)} style={{position:'absolute', top:'20px', right:'20px', background:'none', border:'none', fontSize:'1.5rem', cursor:'pointer'}}>✕</button>
-            <h3 style={{fontSize:'1.8rem', fontWeight:900, textTransform:'uppercase'}}>{activeProject.title}</h3>
-            <p style={{color:'#4b5563', margin:'15px 0', lineHeight:1.6}}>{activeProject.details}</p>
-            {activeProject.links && activeProject.links.map((l, idx) => (
-              <a key={idx} href={l.url} target="_blank" rel="noreferrer" 
-                 style={{display:'inline-block', background:'var(--pepa-yellow)', padding:'10px 20px', borderRadius:'99px', textDecoration:'none', color:'var(--dark)', fontWeight:800, marginRight:'10px', marginTop:'10px'}}>
-                {l.name} ↗
-              </a>
-            ))}
-          </>
-        )}
-      </div>
     </section>
   );
 };
-
 
 export const Achievements = () => {
   const sectionRef = useRef(null);
