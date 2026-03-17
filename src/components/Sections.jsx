@@ -2,163 +2,364 @@ import React from "react";
 import "../styles/Global.css";
 import Pricing from "../components/Pricing";
 import "../styles/FaqSection.css";
-import { useState, useEffect} from "react";
-import "../styles/Services.css";
+import { useState,useRef, useEffect} from "react";
+// import "../styles/Services.css";
 import "../styles/About.css";
 import "../styles/Work.css";
 
-/* ================= HERO ================= */
-export const Hero = () => (
-  <section className="hero reveal">
-    <div className="hero-inner">
-      <span className="hero-badge">PEPA BRANDING SOLUTIONS</span>
 
-      <h1 className="hero-title">
-        The Best Solution <br />
-        <span>For Growing Your Business</span>
-      </h1>
+export const Hero = () => {
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
 
-      <p className="hero-subtitle">
-        Personalized Enterprise Performance Assistance helping brands grow,
-        engage, and dominate the digital landscape.
-      </p>
+  // Handle cursor movement to calculate offset
+  const handleMouseMove = (e) => {
+    const { clientX, clientY } = e;
+    // Calculate movement from -1 to 1 based on screen center
+    const x = (clientX / window.innerWidth - 0.5) * 2;
+    const y = (clientY / window.innerHeight - 0.5) * 2;
+    setMousePos({ x, y });
+  };
 
-      <div className="hero-actions">
-        <a href="#contact" className="hero-btn primary">
-          Contact Us
-        </a>
-        <a href="#services" className="hero-btn secondary">
-          Our Services
-        </a>
+  return (
+    <section className="hero" onMouseMove={handleMouseMove}>
+      <style>{`
+        .hero {
+          min-height: 100vh;
+          position: relative;
+          background: radial-gradient(circle at top right, rgba(254, 224, 100, 0.35), #ffffff 70%);
+          display: flex;
+          align-items: center;
+          padding-top: 100px;
+          overflow: hidden;
+          perspective: 1000px; /* Crucial for 3D effect */
+        }
+
+        .hero-container {
+          display: flex;
+          flex-direction: column;
+          gap: 60px;
+          width: 100%;
+        }
+
+        @media (min-width: 1024px) {
+          .hero-container { flex-direction: row; align-items: center; }
+        }
+
+        /* --- PARALLAX LAYERS --- */
+        .geometric-wrap {
+          position: relative;
+          width: 100%;
+          max-width: 600px;
+          height: 500px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
+
+        /* The Main Image Frame */
+        .main-frame {
+          width: 85%;
+          height: 100%;
+          clip-path: polygon(15% 0%, 100% 0%, 85% 100%, 0% 100%);
+          border-right: 12px solid var(--pepa-yellow);
+          overflow: hidden;
+          /* Uses State for Movement */
+          transform: translate(
+            ${mousePos.x * 15}px, 
+            ${mousePos.y * 15}px
+          );
+          transition: transform 0.2s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .main-frame img {
+          width: 110%; /* Slightly larger to allow room for movement */
+          height: 110%;
+          object-fit: cover;
+          transform: translate(-5%, -5%);
+        }
+
+        /* The Dark Accent Card (Moves more for depth) */
+        .accent-card {
+          position: absolute;
+          bottom: 10%;
+          left: -5%;
+          background: var(--dark);
+          color: white;
+          padding: 30px;
+          width: 240px;
+          border-radius: 0 40px 0 40px;
+          box-shadow: 20px 20px 0px var(--pepa-yellow);
+          z-index: 20;
+          /* Higher multiplier = Moves faster = Appears closer to user */
+          transform: translate(
+            ${mousePos.x * -35}px, 
+            ${mousePos.y * -35}px
+          );
+          transition: transform 0.15s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        /* Glow Follower (Subtle background glow that follows mouse) */
+        .mouse-glow {
+          position: absolute;
+          width: 600px;
+          height: 600px;
+          background: radial-gradient(circle, rgba(254, 224, 100, 0.15) 0%, transparent 70%);
+          top: 0;
+          left: 0;
+          pointer-events: none;
+          transform: translate(
+            calc(${mousePos.x * 50}vw + 25vw), 
+            calc(${mousePos.y * 50}vh + 25vh)
+          );
+          z-index: 0;
+        }
+
+        .hero-title {
+          font-size: clamp(3rem, 7vw, 5rem);
+          font-weight: 900;
+          line-height: 0.95;
+          text-transform: uppercase;
+        }
+
+        .hero-title span {
+        font-size: clamp(4rem, 8vw, 6rem);
+          display: block;
+          color: var(--pepa-yellow);
+          -webkit-text-stroke: 1px var(--dark);
+        }
+
+        @media (max-width: 900px) {
+          /* Disable parallax on mobile for performance and better UX */
+          .main-frame, .accent-card { transform: none !important; }
+          .hero { text-align: center; }
+        }
+      `}</style>
+
+      {/* Floating ambient glow that follows cursor */}
+      <div className="mouse-glow"></div>
+
+      <div className="page-wrap">
+        <div className="hero-container">
+          
+          <div className="hero-content">
+            <div className="contact-badge">PREMIUM AGENCY</div>
+            
+            <h1 className="hero-title">
+              GROWING <br />
+              <span>BUSINESS</span>
+              BEYOND
+            </h1>
+            <p className="contact-description">
+              We re-engineer your digital presence. PEPA is the catalyst for brands ready to dominate.
+            </p>
+            <div className="hero-actions">
+              <a href="#contact" className="hero-btn primary">Elevate Now</a>
+              <a href="#services" className="hero-btn secondary" style={{border: 'none'}}>View Services →</a>
+            </div>
+          </div>
+
+          <div className="hero-visual">
+            <div className="geometric-wrap">
+              <div className="main-frame">
+                <img 
+                  src="https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&q=80&w=800" 
+                  alt="Team Performance" 
+                />
+              </div>
+
+              <div className="accent-card">
+                <h4 style={{fontSize: '1.5rem', marginBottom: '10px'}}>10X</h4>
+                <p style={{fontSize: '0.75rem', opacity: '0.7', textTransform: 'uppercase'}}>
+                  Average Performance Increase
+                </p>
+              </div>
+            </div>
+          </div>
+
+        </div>
       </div>
-    </div>
-  </section>
-);
+    </section>
+  );
+};
 
 /* ================= SERVICES ================= */
-
 export const Services = () => {
+  const sectionRef = useRef(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('active');
+          } else {
+            entry.target.classList.remove('active');
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    const elements = sectionRef.current.querySelectorAll('.service-row');
+    elements.forEach((el) => observer.observe(el));
+
+    return () => observer.disconnect();
+  }, []);
 
   const services = [
     {
+      id: "01",
       title: "Social Media Marketing",
-      desc:
-        "Platform-specific content, posters, reels, and campaigns that build engagement and brand trust.",
-      points: [
-        "Instagram, Facebook, LinkedIn, YouTube",
-        "Posters, Reels & Shorts",
-        "Content Calendar & Scheduling",
-        "Audience Growth Strategy"
-      ],
-      icon: "📱"
+      desc: "Platform-specific content and high-energy reels that build brand trust.",
+      points: ["Instagram & LinkedIn", "Reels & Posters"],
+      grade: "rgba(254, 224, 100, 0.2)" 
     },
     {
-      title: "SEO & Website Management",
-      desc:
-        "Search-optimized websites designed to rank higher, convert better, and scale effortlessly.",
-      points: [
-        "On-Page & Technical SEO",
-        "Speed & Performance Optimization",
-        "Landing Page Design",
-        "Website Maintenance"
-      ],
-      icon: "🌐",
-      highlight: true
+      id: "02",
+      title: "SEO & Management",
+      desc: "Search-optimized websites designed to rank higher and scale faster.",
+      points: ["Technical SEO", "Performance"],
+      grade: "rgba(254, 224, 100, 0.5)" 
     },
     {
+      id: "03",
       title: "Premium Branding",
-      desc:
-        "Influencer marketing, video production, paid ads, and custom brand strategies.",
-      points: [
-        "Brand Identity Design",
-        "Influencer Collaborations",
-        "Video Ads & Creatives",
-        "Paid Campaign Management"
-      ],
-      icon: "🚀"
+      desc: "Cinematic video production and custom strategies for market leaders.",
+      points: ["Identity", "Paid Campaigns"],
+      grade: "rgba(254, 224, 100, 0.9)" 
     }
   ];
 
   return (
-    <>
-    <section className="services-page" id="services">
+    <section className="services-page" id="services" ref={sectionRef}>
+      <style>{`
+        .services-page {
+          
+          padding: 100px 0;
+          background: radial-gradient(circle at top right, rgba(254, 224, 100, 0.35), #ffffff 70%);
+          overflow: hidden;
+        }
 
-  <div className="services-container">
+        .services-header {
+          margin-bottom: 50px; /* Reduced margin */
+        }
 
-    {/* LEFT */}
-    <div>
-      <span className="services-badge">Our Services</span>
+        .services-stack {
+          display: flex;
+          flex-direction: column;
+          gap: 15px; /* Tighter gap */
+        }
 
-      <h2 className="services-heading">
-        Result-Driven <span>Digital Solutions</span>
-      </h2>
+        /* --- STREAMLINED ROW STYLE --- */
+        .service-row {
+          opacity: 0;
+          transform: translateY(20px);
+          transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+          background: white;
+          border-radius: 20px; /* More compact corners */
+          border: 1px solid #f3f4f6;
+          display: flex;
+          flex-direction: column;
+          position: relative;
+          overflow: hidden;
+        }
 
-      <p className="services-description">
-        From branding to performance marketing, we help businesses grow faster
-        with proven strategies.
-      </p>
-    </div>
+        .service-row.active {
+          opacity: 1;
+          transform: translateY(0);
+        }
 
-    {/* RIGHT */}
-    <div className="services-right">
+        @media (min-width: 1024px) {
+          .service-row { flex-direction: row; align-items: center; min-height: 140px; }
+        }
 
-      <div className="service-item">
-        <div className="service-header">
-          <div className="service-icon">📱</div>
-          <h3 className="service-title">Social Media Marketing</h3>
+        /* --- COMPACT NUMBERS --- */
+        .service-id {
+          font-size: 3.5rem; /* Reduced from 7rem */
+          font-weight: 900;
+          color: transparent;
+          -webkit-text-stroke: 1px #e5e7eb;
+          margin-left: 30px;
+          transition: 0.6s ease;
+        }
+
+        .service-row.active .service-id {
+          -webkit-text-stroke: 1px var(--pepa-yellow);
+          color: rgba(254, 224, 100, 0.1);
+        }
+
+        .service-main { padding: 25px 40px; flex: 1; }
+        .service-title { font-size: 1.6rem; font-weight: 900; text-transform: uppercase; margin-bottom: 8px; }
+        .service-text { font-size: 0.95rem; color: #6b7280; line-height: 1.5; max-width: 500px; }
+
+        .grade-bar {
+          position: absolute;
+          left: 0; top: 0; bottom: 0; width: 8px;
+          background: var(--pepa-yellow);
+        }
+
+        /* --- COMPACT ACTION --- */
+        .arrow-action {
+          width: 50px; height: 50px; /* Reduced from 80px */
+          background: var(--dark); color: white;
+          display: flex; align-items: center; justify-content: center;
+          border-radius: 50%; text-decoration: none; font-size: 1.2rem;
+          margin-right: 30px; transition: 0.3s;
+        }
+
+        .arrow-action:hover {
+          background: var(--pepa-yellow);
+          color: var(--dark);
+          transform: translateX(5px);
+        }
+
+        @media (max-width: 1024px) {
+          .service-row { margin: 0 15px; }
+          .service-id { font-size: 2.5rem; margin-top: 15px; }
+          .arrow-action { width: 100%; height: 50px; border-radius: 0; margin: 0; }
+          .service-main { padding: 20px; }
+        }
+      `}</style>
+
+      <div className="page-wrap">
+        {/* --- HEADER TITLE --- */}
+        <div className="services-header">
+          <span className="contact-badge" style={{ background: 'var(--pepa-yellow)', padding: '5px 15px', borderRadius: '99px', fontSize: '0.65rem', fontWeight: '800' }}>
+            WHAT WE DO
+          </span>
+          <h2 style={{ fontSize: 'clamp(2rem, 5vw, 3.5rem)', fontWeight: '950', marginTop: '15px', textTransform: 'uppercase', lineHeight: '1' }}>
+            DIGITAL <span style={{ color: 'var(--pepa-yellow)', WebkitTextStroke: '1px var(--dark)' }}>SOLUTIONS</span>
+          </h2>
         </div>
-        <p className="service-text">
-          Platform-specific content, posters, reels, and campaigns.
-        </p>
-        <ul className="service-points">
-          <li>Instagram, Facebook, LinkedIn</li>
-          <li>Posters & Reels</li>
-          <li>Content Calendar</li>
-        </ul>
-      </div>
 
-      <div className="service-item featured">
-        <div className="service-header">
-          <div className="service-icon">🌐</div>
-          <h3 className="service-title">SEO & Website Management</h3>
+        {/* --- STACK --- */}
+        <div className="services-stack">
+          {services.map((s, index) => (
+            <div key={s.id} className="service-row" style={{ transitionDelay: `${index * 0.1}s` }}>
+              <div className="grade-bar" style={{ background: s.grade }}></div>
+              <div className="service-id">{s.id}</div>
+              
+              <div className="service-main">
+                <h3 className="service-title">{s.title}</h3>
+                <p className="service-text">{s.desc}</p>
+                
+                <div style={{marginTop: '15px', display: 'flex', gap: '8px'}}>
+                  {s.points.map((p, i) => (
+                    <span key={i} style={{ fontSize: '0.7rem', fontWeight: '700', padding: '4px 12px', background: '#f9f9f9', border: `1px solid ${s.grade}`, borderRadius: '99px' }}>
+                      {p}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              <a href="#contact" className="arrow-action">→</a>
+            </div>
+          ))}
         </div>
-        <p className="service-text">
-          Search-optimized websites designed to rank higher.
-        </p>
-        <ul className="service-points">
-          <li>On-Page SEO</li>
-          <li>Technical SEO</li>
-          <li>Maintenance</li>
-        </ul>
       </div>
-
-      <div className="service-item">
-        <div className="service-header">
-          <div className="service-icon">🚀</div>
-          <h3 className="service-title">Premium Branding</h3>
-        </div>
-        <p className="service-text">
-          Influencer marketing, video ads, and branding.
-        </p>
-        <ul className="service-points">
-          <li>Brand Identity</li>
-          <li>Influencer Campaigns</li>
-          <li>Paid Ads</li>
-        </ul>
-      </div>
-
-    </div>
-
-  </div>
-  
-</section>
-<Pricing/>
-</>
+    </section>
   );
 };
-
-
-
 /* ================= ABOUT ================= */
 
 export const About = () => {
@@ -223,44 +424,171 @@ export const About = () => {
 /* ================= WORK ================= */
 
 export const Work = () => {
+  const sectionRef = useRef(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('active');
+          } else {
+            entry.target.classList.remove('active');
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    const cards = sectionRef.current.querySelectorAll('.work-card');
+    cards.forEach((card) => observer.observe(card));
+
+    return () => observer.disconnect();
+  }, []);
 
   const works = [
-    "Brand Campaigns",
-    "Corporate Websites",
-    "Social Media Growth",
-    "E-commerce Marketing",
-    "Lead Generation Funnels",
-    "Video Marketing"
+    { title: "Brand Campaigns", offset: "-40px" },
+    { title: "Corporate Websites", offset: "40px" },
+    { title: "Social Growth", offset: "-40px" },
+    { title: "E-comm Marketing", offset: "40px" },
+    { title: "Lead Funnels", offset: "-40px" },
+    { title: "Video Marketing", offset: "40px" }
   ];
 
   return (
-    <section className="work-section" id="work">
+    <section className="work-section" id="work" ref={sectionRef}>
+      <style>{`
+        .work-section {
+          padding: 100px 0;
+          background: radial-gradient(circle at top right, rgba(254, 224, 100, 0.35), #ffffff 70%);
+          overflow: hidden;
+        }
 
-      <span className="work-badge">Our Work</span>
+        .work-title {
+          font-size: clamp(2.5rem, 6vw, 4rem);
+          font-weight: 950;
+          text-transform: uppercase;
+          letter-spacing: -2px;
+          margin-bottom: 60px;
+          text-align: center;
+        }
 
-      <h2 className="work-title">
-        Selected <span>Projects</span>
-      </h2>
+        .work-title span {
+          color: var(--pepa-yellow);
+          -webkit-text-stroke: 1px var(--dark);
+        }
 
-      <p className="work-subtitle">
-        Campaigns and digital experiences crafted for real-world impact.
-      </p>
+        /* --- THE COMBINED SHAPE CONTAINER --- */
+        .work-stack {
+          display: flex;
+          flex-direction: column;
+          max-width: 900px;
+          margin: 0 auto;
+          /* Negative margin removes the vertical gaps between shapes */
+          gap: -2px; 
+        }
 
-      <div className="work-grid">
-        {works.map((item, i) => (
-          <div key={i} className="work-card">
-            <h3>{item}</h3>
-            <p>
-              High-quality solutions designed to drive engagement and results.
-            </p>
-          </div>
-        ))}
+        .work-card {
+          position: relative;
+          background: white;
+          padding: 30px 60px;
+          min-height: 100px;
+          display: flex;
+          align-items: center;
+          /* Interlocking Border */
+          border-left: 10px solid var(--pepa-yellow);
+          transition: all 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+          opacity: 0;
+          
+          /* The Parallelogram Clip-Path */
+          clip-path: polygon(10% 0%, 100% 0%, 90% 100%, 0% 100%);
+          
+          /* Initial "Scattered" Position */
+          margin-top: -15px; /* Pulls cards together into one shape */
+        }
+
+        /* Desktop: Pieces slide in from left/right to lock in center */
+        .work-card:nth-child(odd) { transform: translateX(-120px) skewX(-5deg); }
+        .work-card:nth-child(even) { transform: translateX(120px) skewX(5deg); }
+
+        .work-card.active {
+          opacity: 1;
+          transform: translateX(0) skewX(0);
+        }
+
+        /* Combined shape hover effect */
+        .work-card:hover {
+          background: var(--dark);
+          color: white;
+          z-index: 50;
+          transform: scale(1.05);
+        }
+
+        .work-card h3 {
+          font-size: clamp(1.1rem, 3vw, 1.8rem);
+          font-weight: 900;
+          text-transform: uppercase;
+          letter-spacing: -1px;
+        }
+
+        .work-number {
+          font-size: 3.5rem;
+          font-weight: 950;
+          color: rgba(0,0,0,0.03);
+          margin-right: 30px;
+          transition: 0.5s;
+        }
+
+        .work-card.active:hover .work-number {
+          color: rgba(254, 224, 100, 0.2);
+        }
+
+        /* MOBILE OPTIMIZATION */
+        @media (max-width: 768px) {
+          .work-stack { padding: 0 10px; }
+          .work-card {
+            padding: 20px 40px;
+            clip-path: polygon(8% 0%, 100% 0%, 92% 100%, 0% 100%);
+            margin-top: -10px;
+          }
+          /* On mobile, slide from bottom for a cleaner feel */
+          .work-card:nth-child(odd), .work-card:nth-child(even) { 
+            transform: translateY(50px); 
+          }
+          .work-card.active { transform: translateY(0); }
+        }
+      `}</style>
+
+      <div className="page-wrap">
+        <div style={{ textAlign: 'center', marginBottom: '40px' }}>
+          <span className="contact-badge">Portfolio</span>
+          <h2 className="work-title">
+            SELECTED <span>PROJECTS</span>
+          </h2>
+        </div>
+
+        <div className="work-stack">
+          {works.map((item, i) => (
+            <div 
+              key={i} 
+              className="work-card"
+              style={{ transitionDelay: `${i * 0.1}s` }}
+            >
+              <span className="work-number">0{i + 1}</span>
+              <h3>{item.title}</h3>
+              
+              <div style={{
+                marginLeft: 'auto',
+                fontSize: '1.5rem',
+                opacity: 0.4
+              }}>→</div>
+            </div>
+          ))}
+        </div>
       </div>
-
     </section>
   );
 };
-
 
 export const Achievements = () => {
 

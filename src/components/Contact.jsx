@@ -67,8 +67,7 @@ Thank you.
       <div className="contact-container">
         {/* LEFT */}
         <div className="contact-left">
-          <span className="contact-badge">Contact</span>
-
+          
           <h1 className="contact-heading">
             Let’s Build Something <span>Exceptional</span>
           </h1>

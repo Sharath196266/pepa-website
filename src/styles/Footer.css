@@ -37,14 +37,14 @@
 }
 /* Brand */
 .footer-brand h3 {
-  font-size: 1.2rem;
+  font-size: 1.4rem;
   font-weight: 800;
   color: #111827;
   margin-bottom: 12px;
 }
 
 .footer-brand p {
-  font-size: 0.9rem;
+  font-size: 1rem;
   line-height: 1.6;
   max-width: 320px;
 }
@@ -52,7 +52,7 @@
 /* Columns */
 .footer-col h4,
 .footer-newsletter h4 {
-  font-size: 0.8rem;
+  font-size: 1rem;
   font-weight: 800;
   margin-bottom: 14px;
   color: #111827;
@@ -62,7 +62,7 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  font-size: 0.83rem;
+  font-size: 0.95rem;
   color: #50576b;
   text-decoration: none;
   margin-bottom: 0px;
@@ -75,7 +75,7 @@
 
 /* Newsletter */
 .footer-newsletter p {
-  font-size: 0.828rem;
+  font-size: 0.95rem;
   line-height: 1.6;
   margin-bottom: 16px;
   max-width: 320px;
@@ -100,7 +100,7 @@
   flex: 1;
   border: none;
   outline: none;
-  font-size: 0.73rem;
+  font-size: 0.8rem;
   background: transparent;
 }
 
