@@ -650,17 +650,33 @@ export const Work = () => {
 
 
 export const Achievements = () => {
+  const sectionRef = useRef(null);
+  const [isVisible, setIsVisible] = useState(false);
 
   const stats = [
     { label: "Projects in Pipeline", value: 5 },
-    { label: "Marketing Strategies Designed", value: 12 },
+    { label: "Strategies Designed", value: 12 },
     { label: "Industries Targeted", value: 8 },
     { label: "Launched In", value: 2026, noAnim: true }
   ];
 
   const [counts, setCounts] = useState(stats.map(() => 0));
 
+  // Trigger animation only when in view
   useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) setIsVisible(true);
+      },
+      { threshold: 0.3 }
+    );
+    if (sectionRef.current) observer.observe(sectionRef.current);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (!isVisible) return;
+
     const interval = setInterval(() => {
       setCounts(prev =>
         prev.map((c, i) => {
@@ -668,37 +684,145 @@ export const Achievements = () => {
           return c < stats[i].value ? c + 1 : c;
         })
       );
-    }, 40);
+    }, 60);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [isVisible]);
+
+  // 3D Tilt Logic
+  const handleMouseMove = (e) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = ((e.clientX - rect.left) / rect.width - 0.5) * 20;
+    const y = ((e.clientY - rect.top) / rect.height - 0.5) * -20;
+    e.currentTarget.style.transform = `perspective(1000px) rotateX(${y}deg) rotateY(${x}deg) scale3d(1.02, 1.02, 1.02)`;
+  };
+
+  const handleMouseLeave = (e) => {
+    e.currentTarget.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
+  };
 
   return (
-    <section className="achievements-section">
+    <section className="achievements-section" ref={sectionRef}>
+      <style>{`
+        .achievements-section {
+          padding: 100px 0;
+          background: radial-gradient(circle at top right, rgba(254, 224, 100, 0.35), #ffffff 70%);
+          text-align: center;
+          overflow: hidden;
+        }
 
-      <span className="achievements-badge">Milestones</span>
+        .achievements-title {
+          font-size: clamp(2.5rem, 6vw, 4rem);
+          font-weight: 950;
+          text-transform: uppercase;
+          letter-spacing: -2px;
+          line-height: 1;
+          margin: 20px 0;
+        }
 
-      <h2 className="achievements-title">
-        Building Momentum <span>From Day One</span>
-      </h2>
+        .achievements-title span {
+          color: var(--pepa-yellow);
+          -webkit-text-stroke: 1px var(--dark);
+        }
 
-      <p className="achievements-subtitle">
-        We may be new, but our foundation is strong. PEPA Branding Solutions is
-        built on strategy, creativity, and execution excellence.
-      </p>
+        .achievements-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+          gap: 25px;
+          margin-top: 60px;
+          perspective: 1500px;
+        }
 
-      <div className="achievements-grid">
-        {stats.map((s, i) => (
-          <div key={i} className="achievement-card">
-            <h3>{counts[i]}</h3>
-            <p>{s.label}</p>
-          </div>
-        ))}
+        .achievement-card {
+          background: white;
+          padding: 50px 30px;
+          border-radius: 35px;
+          border: 1px solid rgba(0,0,0,0.05);
+          position: relative;
+          transition: transform 0.1s ease-out, box-shadow 0.3s ease;
+          transform-style: preserve-3d;
+          overflow: hidden;
+        }
+
+        .achievement-card:hover {
+          box-shadow: 0 40px 80px rgba(0,0,0,0.1);
+          border-color: var(--pepa-yellow);
+        }
+
+        .achievement-card h3 {
+          font-size: 4rem;
+          font-weight: 950;
+          color: var(--dark);
+          margin-bottom: 10px;
+          transform: translateZ(50px);
+        }
+
+        .achievement-card p {
+          font-size: 0.9rem;
+          font-weight: 800;
+          color: #6b7280;
+          text-transform: uppercase;
+          letter-spacing: 1px;
+          transform: translateZ(30px);
+        }
+
+        /* Geometric Background Ghost Text */
+        .achievement-card::before {
+          content: 'DATA';
+          position: absolute;
+          bottom: -10px;
+          right: -10px;
+          font-size: 5rem;
+          font-weight: 900;
+          color: rgba(0,0,0,0.02);
+          z-index: 0;
+          pointer-events: none;
+        }
+
+        @media (max-width: 768px) {
+          .achievement-card { padding: 40px 20px; }
+          .achievement-card h3 { font-size: 3rem; }
+          .achievements-title { font-size: 2.2rem; }
+        }
+      `}</style>
+
+      <div className="page-wrap">
+        <span className="contact-badge" style={{ background: 'var(--pepa-yellow)', padding: '6px 18px', borderRadius: '99px', fontSize: '0.7rem', fontWeight: '800' }}>
+          MILESTONES
+        </span>
+
+        <h2 className="achievements-title">
+          Building Momentum <br /> <span>From Day One</span>
+        </h2>
+
+        <p className="contact-description" style={{ margin: '0 auto', maxWidth: '650px' }}>
+          We may be new, but our foundation is solid. PEPA is built on 
+          calculated strategy, digital dominance, and execution excellence.
+        </p>
+
+        <div className="achievements-grid">
+          {stats.map((s, i) => (
+            <div 
+              key={i} 
+              className="achievement-card"
+              onMouseMove={handleMouseMove}
+              onMouseLeave={handleMouseLeave}
+            >
+              <h3>{counts[i]}{!s.noAnim && "+"}</h3>
+              <p>{s.label}</p>
+              
+              <div style={{
+                position: 'absolute', top: 0, left: 0, width: '100%', height: '5px',
+                background: i % 2 === 0 ? 'var(--pepa-yellow)' : 'var(--dark)'
+              }}></div>
+            </div>
+          ))}
+        </div>
       </div>
-
     </section>
   );
 };
+
 /* ================= FAQ ================= */
 export const FAQ = () => {
 
